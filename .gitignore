@@ -1,0 +1,13 @@
+# Files autosaved by emacs
+*~
+
+# Ignore macOS garbage files
+.DS_Store
+# Ignore backup files
+backup
+*.sqle
+*.zip
+.env
+.vscode/settings.json
+# Dependency directories
+node_modules/
