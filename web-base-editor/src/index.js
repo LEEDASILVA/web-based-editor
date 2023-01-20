@@ -1,23 +1,16 @@
+import './index.css'
+import { App } from './components/App.js'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Editor from '@monaco-editor/react'
-import './index.css'
-import reportWebVitals from './reportWebVitals.js'
 
-const App = () => {
-  return (
-    <Editor
-      height="90vh"
-      defaultLanguage="javascript"
-      defaultValue="// some comment"
-    />
-  )
-}
+// try monaco vs codemirror
+// we can also use sandpack (this uses codemirror)
+// dependencies for the monaco editor
+// TODO : add monaco editor as a tab to also test it out !
+// - "@codesandbox/sandpack-react": "^1.20.4",
+// - "@monaco-editor/loader": "^1.3.2",
+// - "@monaco-editor/react": "^4.4.6",
 
 const rootElement = document.getElementById('root')
 ReactDOM.render(<App />, rootElement)
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()
