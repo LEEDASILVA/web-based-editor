@@ -24,49 +24,39 @@ const useStorage = (key, initialValue) => {
 }
 
 const Tab = ({ active, ...props }) => {
-  const commonStyle = {
-    'font-size': '20px',
-    padding: '10px 60px',
-    cursor: 'pointer',
-    opacity: '0.6',
-    background: 'white',
-    border: '0',
-    outline: '0',
-  }
-  const isActiveStyle = active && {
-    'border-bottom': '2px solid black',
-    opacity: 1,
-  }
   return (
-    <button style={{ ...commonStyle, ...isActiveStyle }} {...props}>
-      {props.key}
-    </button>
+    <div className="editor-title" key={props.key} {...props}>
+      <p style={active ? { opacity: 1 } : { opacity: 0.6 }}>{props.tab}</p>
+    </div>
   )
 }
 
-const Tabs = ({ tabs }) => {
-  const [active, setActive] = useState(tabs[0])
-
+const Tabs = ({ active, setActive, tabs }) => {
   return (
     <>
-      <div style={{ display: 'flex' }}>
+      <div
+        style={{ marginBottom: '1px', background: '#263238', display: 'flex' }}
+      >
         {tabs.map(tab => (
-          <Tab key={tab} active={active} onClick={() => setActive(tab)} />
+          <Tab
+            tab={tab}
+            key={tab}
+            active={active === tab}
+            onClick={() => setActive(tab)}
+          />
         ))}
       </div>
-      <Children />
     </>
   )
 }
 
-const CodeMirrorEditor = ({ displayName, value, onChange, options }) => {
+const CodeMirrorEditor = ({ value, onChange, options }) => {
   const handleChange = (editor, data, value) => {
     onChange(value)
   }
 
   return (
     <div className="editor-container">
-      <div className="editor-title">{displayName}</div>
       <Controlled
         onBeforeChange={handleChange}
         value={value}
@@ -81,42 +71,72 @@ const fileTypes = {
   go: { language: 'go' },
   sh: { language: 'sh' },
   css: { language: 'css' },
-  html: { language: 'html' },
+  html: { language: 'xml' },
   rs: { language: 'rust' },
   py: { language: 'python' },
   js: { language: 'javascript' },
 }
 
-// expectedFiles -> contains the array of file names
-// language -> DOM, javascript, go, rust, python ....
 const Editor = ({ fileList, options = {} }) => {
+  const [active, setActive] = useState(Object.keys(fileList)[0])
+  const [srcDoc, setSrcDoc] = useState('')
   const [files, setFiles] = useStorage(
     'files',
     !fileList ? { 'index.js': '// code here' } : fileList,
   )
 
   const { lineWrapping, lint, lineNumbers, theme, enablePreview } = options
+  const type = active.substring(active.lastIndexOf('.') + 1, active.length)
   return (
     <>
-      {Object.entries(files).map(([name, content]) => {
-        const type = name.substring(name.lastIndexOf('.') + 1, name.length)
-        const file = fileTypes[type]
-        return (
-          <CodeMirrorEditor
-            key={name}
-            displayName={name}
-            value={content}
-            onChange={value => setFiles({ ...files, [name]: value })}
-            options={{
-              lineWrapping: lineWrapping || true,
-              lint: lint || true,
-              lineNumbers: lineNumbers || true,
-              theme: theme || 'material',
-              mode: file.language,
-            }}
-          />
-        )
-      })}
+      <Tabs
+        className="editor-title"
+        active={active}
+        setActive={setActive}
+        tabs={Object.keys(fileList)}
+      />
+      <div className="panel top-panel">
+        <CodeMirrorEditor
+          key={active}
+          value={files[active]}
+          onChange={value => setFiles({ ...files, [active]: value })}
+          options={{
+            lineWrapping: lineWrapping || true,
+            lint: lint || true,
+            lineNumbers: lineNumbers || true,
+            theme: theme || 'material',
+            mode: fileTypes[type].language,
+          }}
+        />
+      </div>
+      {enablePreview && (
+        <>
+          <div style={{ background: '#3c3e44' }} className="editor-title">
+            <button
+              onClick={() => {
+                setSrcDoc(`
+            <html>
+              <body>${files['index.html']}</body>
+              <style>${files['index.css']}</style>
+              <script>${files['index.js']}</script>
+            </html>
+            `)
+              }}
+            >
+              Render output
+            </button>
+          </div>
+          <div className="panel">
+            <iframe
+              title="output"
+              sandbox="allow-scripts"
+              width="100%"
+              height="100%"
+              srcDoc={srcDoc}
+            />
+          </div>
+        </>
+      )}
     </>
   )
 }
