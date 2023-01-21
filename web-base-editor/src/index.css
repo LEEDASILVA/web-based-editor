@@ -39,3 +39,14 @@ body {
   flex-grow: 1;
   overflow: hidden;
 }
+
+button {
+  border: solid gray 2px;
+  background: none;
+  margin: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  border: solid black 2px;
+}

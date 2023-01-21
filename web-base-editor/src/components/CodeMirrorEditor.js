@@ -87,6 +87,7 @@ const Editor = ({ fileList, options = {} }) => {
 
   const { lineWrapping, lint, lineNumbers, theme, enablePreview } = options
   const type = active.substring(active.lastIndexOf('.') + 1, active.length)
+
   return (
     <>
       <Tabs
@@ -111,7 +112,7 @@ const Editor = ({ fileList, options = {} }) => {
       </div>
       {enablePreview && (
         <>
-          <div style={{ background: '#3c3e44' }} className="editor-title">
+          <div style={{ background: '#263238' }}>
             <button
               onClick={() => {
                 setSrcDoc(`
@@ -123,7 +124,12 @@ const Editor = ({ fileList, options = {} }) => {
             `)
               }}
             >
-              Render output
+              <svg width="30px" viewBox="0 0 130 130">
+                <g stroke="grey">
+                  <path d="M65 29.61c33.13 0 60 35.39 60 35.39s-26.87 35.39-60 35.39S5 65 5 65s26.87-35.39 60-35.39z" fill="none" strokeWidth="8px"></path>
+                  <circle stroke="grey" strokeWidth="20px" cx="65" cy="65" r="5"></circle>
+                </g>
+              </svg>
             </button>
           </div>
           <div className="panel">
