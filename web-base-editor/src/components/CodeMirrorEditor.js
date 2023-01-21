@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/material.css'
+import 'codemirror/theme/lesser-dark.css'
 import 'codemirror/mode/xml/xml.js'
 import 'codemirror/mode/javascript/javascript.js'
 import 'codemirror/mode/css/css.js'
@@ -23,19 +23,16 @@ const useStorage = (key, initialValue) => {
   return [value, setValue]
 }
 
-const Tab = ({ active, ...props }) => {
-  return (
+const Tab = ({ active, ...props }) => (
     <div className="editor-title" key={props.key} {...props}>
       <p style={active ? { opacity: 1 } : { opacity: 0.6 }}>{props.tab}</p>
     </div>
   )
-}
 
-const Tabs = ({ active, setActive, tabs }) => {
-  return (
+const Tabs = ({ active, setActive, tabs }) => (
     <>
       <div
-        style={{ marginBottom: '1px', background: '#263238', display: 'flex' }}
+        style={{ marginBottom: '1px', background: '#262626', display: 'flex' }}
       >
         {tabs.map(tab => (
           <Tab
@@ -48,7 +45,6 @@ const Tabs = ({ active, setActive, tabs }) => {
       </div>
     </>
   )
-}
 
 const CodeMirrorEditor = ({ value, onChange, options }) => {
   const handleChange = (editor, data, value) => {
@@ -105,14 +101,14 @@ const Editor = ({ fileList, options = {} }) => {
             lineWrapping: lineWrapping || true,
             lint: lint || true,
             lineNumbers: lineNumbers || true,
-            theme: theme || 'material',
+            theme: theme || 'lesser-dark',
             mode: fileTypes[type].language,
           }}
         />
       </div>
       {enablePreview && (
         <>
-          <div style={{ background: '#263238' }}>
+          <div style={{ background: '#262626' }}>
             <button
               onClick={() => {
                 setSrcDoc(`
