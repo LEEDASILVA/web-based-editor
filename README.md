@@ -2,7 +2,7 @@
 
 docker :
 
-> docker build -t c-editor:latest .
+> docker build -t c-editor:latest . \
 > docker run --name c-editor -d -p 3000:3000 c-editor:latest
 
 no docker :
